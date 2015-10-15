@@ -289,8 +289,14 @@ module Beaker
               host[:version] = opts[:version]
 
               # Certain install paths may not create the config dirs/files needed
-              on host, "mkdir -p #{host['puppetpath']}" unless host[:type] =~ /aio/
-              on host, "echo '' >> #{host.puppet['hiera_config']}"
+
+              if ((host['platform'] =~ /windows/) and not host.is_cygwin?)
+                on host, "if not exist #{host['puppetpath']} mkdir #{host['puppetpath']}"
+              else
+                on host, "echo '' >> #{host.puppet['hieraconf']}"
+                on host, "mkdir -p #{host['puppetpath']}" unless host[:type] =~ /aio/
+              end
+
             end
           end
 
@@ -1051,7 +1057,7 @@ module Beaker
           configure_type_defaults_on( host )
         end
 
-        # Install development repo of the puppet-agent on the given host(s).  Downloaded from 
+        # Install development repo of the puppet-agent on the given host(s).  Downloaded from
         # location of the form DEV_BUILDS_URL/puppet-agent/AGENT_VERSION/repos
         #
         # @param [Host, Array<Host>, String, Symbol] hosts    One or more hosts to act upon,
@@ -1272,7 +1278,7 @@ NOASK
         end
         alias_method :install_puppetagent_dev_repo, :install_puppet_agent_dev_repo_on
 
-        # Install shared repo of the puppet-agent on the given host(s).  Downloaded from 
+        # Install shared repo of the puppet-agent on the given host(s).  Downloaded from
         # location of the form PE_PROMOTED_BUILDS_URL/PE_VER/puppet-agent/AGENT_VERSION/repo
         #
         # @param [Host, Array<Host>, String, Symbol] hosts    One or more hosts to act upon,
