@@ -1,6 +1,8 @@
 # Beaker
 
-Puppet Labs cloud enabled acceptance testing tool.
+For of Puppet Labs cloud enabled acceptance testing tool.
+
+With WindowsPS provider specific changes
 
 # Installation
 
