@@ -295,7 +295,7 @@ module Beaker
               if ((host['platform'] =~ /windows/) and not host.is_cygwin?)
                 # Do nothing
               else
-                on host, "echo '' >> #{host.puppet['hieraconf']}"
+                on host, "echo '' >> #{host.puppet['hiera_config']}"
               end
 
             end
