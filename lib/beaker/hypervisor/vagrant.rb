@@ -36,7 +36,7 @@ module Beaker
         v_file << "    v.vm.network :private_network, ip: \"#{host['ip'].to_s}\", :netmask => \"#{host['netmask'] ||= "255.255.0.0"}\", :mac => \"#{randmac}\"\n"
 
         if /windows/i.match(host['platform'])
-          v_file << "    v.vm.network :forwarded_port, guest: 3389, host: 3389\n"
+          v_file << "    v.vm.network :forwarded_port, guest: 3389, host: 3389, auto_correct: true\n"
           v_file << "    v.vm.network :forwarded_port, guest: 5985, host: 5985, id: 'winrm', auto_correct: true\n"
           v_file << "    v.vm.guest = :windows\n"
         end
@@ -92,6 +92,11 @@ module Beaker
         end
         #replace hostname with ip
         ssh_config = ssh_config.gsub(/Host #{host.name}/, "Host #{host['ip']}") unless not host['ip']
+
+        # For windows, we ssh directly, so fix the hostname
+        if host['platform'] =~ /windows/
+          ssh_config = ssh_config.gsub(/HostName 127.0.0.1/, "HostName #{host['ip']}") unless not host['ip']
+        end
 
         #set the user
         ssh_config = ssh_config.gsub(/User vagrant/, "User #{user}")
