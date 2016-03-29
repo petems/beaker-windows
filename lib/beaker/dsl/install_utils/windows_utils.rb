@@ -134,7 +134,14 @@ exit /B %errorlevel%
             # if puppet service exists, then pe-puppet is not queried
             # if puppet service does not exist, pe-puppet is queried and that exit code is used
             # therefore, this command will always exit 0 if either service is installed
-            on host, Command.new("sc query puppet || sc query pe-puppet", [], { :cmdexe => true })
+            opts = {
+              :desired_exit_codes => 0,
+              :max_retries => 5,
+              :retry_interval => 2,
+            }
+            
+            retry_on(host, "sc query puppet || sc query pe-puppet", opts)
+            on host, Command.new("", [], { :cmdexe => true })
           end
         end
 
