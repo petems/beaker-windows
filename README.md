@@ -1,27 +1,13 @@
-# Beaker
+# THIS REPO IS NOW DEPRECATED - Beaker and Beaker rspec now work with Windows Bitvise hosts without this fork.
 
-For of Puppet Labs cloud enabled acceptance testing tool.
+To get a guarenteed working Windows + Beaker + Bitvise setup, the following in a Gemfile should work:
 
-With WindowsPS provider specific changes
-
-# Installation
-
-See [Beaker Installation](https://github.com/puppetlabs/beaker/wiki/Beaker-Installation) wiki page.
-
-#Documentation
-
-Documentation for Beaker can be found online at the
-[Beaker Wiki](https://github.com/puppetlabs/beaker/wiki).
-
-#Beaker API
-
-[RubyDoc Beaker Documentation Server](http://rubydoc.info/github/puppetlabs/beaker/frames)
-
-#License
-
-See [LICENSE](LICENSE) file.
-
-#Support
-
-Please log tickets and issues at our [Beaker Issue Tracker](https://tickets.puppetlabs.com/issues/?jql=project%20%3D%20BKR).  In addition there is an active #puppet-dev channel on Freenode.
-
+```ruby
+group :system_tests do
+  gem 'winrm', '1.8.1'
+  gem 'beaker', '2.43.0'
+  gem 'beaker-rspec', '5.3.0'
+  gem 'beaker-puppet_install_helper',  :require => false
+  gem 'vagrant-wrapper'
+end
+```
